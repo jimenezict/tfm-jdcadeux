@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 public interface ClientController {
 
-    @GetMapping("/location/{service}")
-    public StationsLocation getStationsLocation(@PathVariable("service") String service);
+    @GetMapping("/location/{domain}/{service}")
+    public StationsLocation getStationsLocation(@PathVariable("domain") String domain, @PathVariable("service") String service);
 
-    @GetMapping("/status/{city}/{service}")
-    public StationsStatus getStationStatus(@PathVariable("city") String city, @PathVariable("service") String service);
+    @GetMapping("/status/{domain}/{city}/{service}")
+    public StationsStatus getStationStatus(@PathVariable("domain") String domain, @PathVariable("city") String city, @PathVariable("service") String service);
 
 }

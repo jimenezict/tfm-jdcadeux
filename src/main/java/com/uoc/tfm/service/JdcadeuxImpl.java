@@ -6,12 +6,12 @@ import org.springframework.stereotype.Service;
 public class JdcadeuxImpl implements Jdcadeux {
 
     @Override
-    public String buildLocationUrl(String service) {
-        return "http://www." + service + ".es/service/carto";
+    public String buildLocationUrl(String domain, String service) {
+        return "http://www." + service + "." + domain + "/service/carto";
     }
 
     @Override
-    public String buildStatusUrl(String service, String city, int id) {
-        return "http://www." + service + ".es/service/stationdetails/" + city + "/" + id;
+    public String buildStatusUrl(String domain, String service, String city, int id) {
+        return "http://www." + service + "." + domain + "/service/stationdetails/" + city + "/" + id;
     }
 }

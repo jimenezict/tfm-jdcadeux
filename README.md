@@ -10,3 +10,8 @@ Valencia:
 Santander
 * http://localhost:8085/location/tusbic
 * http://localhost:8085/status/santander/tusbic
+
+Dublin
+
+* http://localhost:8085/location/ie/dublinbikes
+* http://localhost:8085/status/ie/dublin/dublinbikes

@@ -30,9 +30,9 @@ public class ClientServiceImpl implements ClientService {
     private JdcadeuxImpl jdcadeuxImpl;
 
     @Override
-    public StationsLocation getStationsLocation(String service) {
+    public StationsLocation getStationsLocation(String domain, String service) {
         StationsLocation stationsLocation = new StationsLocation();
-        BufferedReader callResult = getCall(jdcadeuxImpl.buildLocationUrl(service));
+        BufferedReader callResult = getCall(jdcadeuxImpl.buildLocationUrl(domain, service));
 
         try {
             if (nonNull(callResult)) {
@@ -49,12 +49,12 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public StationsStatus getStationStatus(String city, String service) {
+    public StationsStatus getStationStatus(String domain, String city, String service) {
         StationsStatus stationsStatus = new StationsStatus();
-        long numberOfStation = numberOfStations(service);
+        long numberOfStation = numberOfStations(domain, service);
         IntStream.range(1, (int) numberOfStation).parallel().forEach(i -> {
             try {
-                BufferedReader callResult = getCall(jdcadeuxImpl.buildStatusUrl(service, city, i));
+                BufferedReader callResult = getCall(jdcadeuxImpl.buildStatusUrl(domain, service, city, i));
                 String stationXML = callResult.lines().collect(Collectors.joining("\n"));
                 mapStationsStatus(i, stationXML, stationsStatus);
                 callResult.close();
@@ -119,8 +119,8 @@ public class ClientServiceImpl implements ClientService {
                 Integer.valueOf(getValueContent(stationXML, "available")));
     }
 
-    private long numberOfStations(String service) {
-        BufferedReader callResult = getCall(jdcadeuxImpl.buildLocationUrl(service));
+    private long numberOfStations(String domain, String service) {
+        BufferedReader callResult = getCall(jdcadeuxImpl.buildLocationUrl(domain, service));
         long numberOfStation = 0;
 
         try {

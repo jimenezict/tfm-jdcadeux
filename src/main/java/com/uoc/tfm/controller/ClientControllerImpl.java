@@ -18,12 +18,12 @@ public class ClientControllerImpl implements ClientController {
     private ClientService clientService;
 
     @Override
-    public StationsLocation getStationsLocation(String service) {
+    public StationsLocation getStationsLocation(String domain, String service) {
         log.info("Starting station collections: {} and city {}", clientService.getServiceName(), service);
         StationsLocation stationsLocation = new StationsLocation();
 
         try {
-            stationsLocation = clientService.getStationsLocation(service);
+            stationsLocation = clientService.getStationsLocation(domain, service);
         } catch (Exception e) {
             log.error("Fail on Location status collection {} and city {} due to: ", clientService.getServiceName(), service, e);
             return stationsLocation;
@@ -36,12 +36,12 @@ public class ClientControllerImpl implements ClientController {
     }
 
     @Override
-    public StationsStatus getStationStatus(String city, String service) {
+    public StationsStatus getStationStatus(String domain, String city, String service) {
         log.info("Starting station status collections: {} and city {}", service, city);
         StationsStatus stationStatus = new StationsStatus();
 
         try {
-            stationStatus = clientService.getStationStatus(city, service);
+            stationStatus = clientService.getStationStatus(domain, city, service);
         } catch (Exception e) {
             log.error("Fail on station status collection {} and city {} due to: ", clientService.getServiceName(), city, e);
             return stationStatus;
