@@ -8,6 +8,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static java.util.Objects.nonNull;
+import static org.apache.logging.log4j.LogManager.getLogger;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -28,6 +29,8 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     private JdcadeuxImpl jdcadeuxImpl;
+
+    private Logger logger = getLogger(ClientServiceImpl.class);
 
     @Override
     public StationsLocation getStationsLocation(String domain, String service) {
@@ -42,8 +45,7 @@ public class ClientServiceImpl implements ClientService {
                         .forEach(line -> mapLocationLine(line, stationsLocation));
             }
             callResult.close();
-        } catch (Exception ex) {
-        }
+        } catch (Exception ex) {}
 
         return stationsLocation;
     }
@@ -51,17 +53,17 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public StationsStatus getStationStatus(String domain, String city, String service) {
         StationsStatus stationsStatus = new StationsStatus();
-        long numberOfStation = numberOfStations(domain, service);
-        IntStream.range(1, (int) numberOfStation).parallel().forEach(i -> {
+        getStationsLocation(domain, service).getStationLocationList().parallelStream().forEach(stationLocation -> {
+            int i = stationLocation.getId();
             try {
-                BufferedReader callResult = getCall(jdcadeuxImpl.buildStatusUrl(domain, service, city, i));
-                String stationXML = callResult.lines().collect(Collectors.joining("\n"));
-                mapStationsStatus(i, stationXML, stationsStatus);
-                callResult.close();
+                addStationStatusById(domain, city, service, stationsStatus, i);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.warn("Doesn't found a station with id {} for the city {}", i, city);
+            } catch (Exception e) {
+                logger.error("Critical error on id {} for the city {}. Error ", i, city, e);
             }
         });
+
         return stationsStatus;
     }
 
@@ -119,7 +121,7 @@ public class ClientServiceImpl implements ClientService {
                 Integer.valueOf(getValueContent(stationXML, "available")));
     }
 
-    private long numberOfStations(String domain, String service) {
+    private int numberOfStations(String domain, String service) {
         BufferedReader callResult = getCall(jdcadeuxImpl.buildLocationUrl(domain, service));
         long numberOfStation = 0;
 
@@ -131,9 +133,15 @@ public class ClientServiceImpl implements ClientService {
                         .count();
             }
             callResult.close();
-        } catch (Exception ex) {
-        }
+        } catch (Exception ex) {}
 
-        return numberOfStation;
+        return (int) numberOfStation;
+    }
+
+    private void addStationStatusById(String domain, String city, String service, StationsStatus stationsStatus, int i) throws IOException {
+        BufferedReader callResult = getCall(jdcadeuxImpl.buildStatusUrl(domain, service, city, i));
+        String stationXML = callResult.lines().collect(Collectors.joining("\n"));
+        mapStationsStatus(i, stationXML, stationsStatus);
+        callResult.close();
     }
 }
