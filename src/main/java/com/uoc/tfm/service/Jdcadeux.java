@@ -6,4 +6,6 @@ public interface Jdcadeux {
 
     String buildStatusUrl(String domain, String service, String city, int id);
 
+    String buildContractsUrl();
+
 }

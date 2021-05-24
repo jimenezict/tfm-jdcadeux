@@ -2,6 +2,7 @@ package com.uoc.tfm.service;
 
 import com.uoc.tfm.commons.domain.StationsLocation;
 import com.uoc.tfm.commons.domain.StationsStatus;
+import com.uoc.tfm.domain.contracts.Contract;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -12,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -65,6 +67,17 @@ public class ClientServiceImpl implements ClientService {
         });
 
         return stationsStatus;
+    }
+
+    @Override
+    public Contract[] getServiceContracts() {
+        RestTemplate restTemplate = new RestTemplate();
+        Contract[] contracts =
+                restTemplate.getForObject(
+                        jdcadeuxImpl.buildContractsUrl(),
+                        Contract[].class);
+
+        return contracts;
     }
 
     @Override
