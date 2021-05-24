@@ -2,35 +2,52 @@ package com.uoc.tfm.domain.status;
 
 public class StationStatus {
 
-    private int station_id;
-    private int num_bikes_available;
-    private int num_docks_available;
+    private int number;
+    private String address;
+    private Position position;
+    private int bike_stands; //occupacy
+    private int available_bikes;
 
-    public StationStatus(){
-
+    public StationStatus() {
     }
 
-    public int getStation_id() {
-        return station_id;
+    public int getNumber() {
+        return number;
     }
 
-    public void setStation_id(int station_id) {
-        this.station_id = station_id;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
-    public int getNum_bikes_available() {
-        return num_bikes_available;
+    public String getAddress() {
+        return address;
     }
 
-    public void setNum_bikes_available(int num_bikes_available) {
-        this.num_bikes_available = num_bikes_available;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public int getNum_docks_available() {
-        return num_docks_available;
+    public Position getPosition() {
+        return position;
     }
 
-    public void setNum_docks_available(int num_docks_available) {
-        this.num_docks_available = num_docks_available;
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public int getBike_stands() {
+        return bike_stands;
+    }
+
+    public void setBike_stands(int bike_stands) {
+        this.bike_stands = bike_stands;
+    }
+
+    public int getAvailable_bikes() {
+        return available_bikes;
+    }
+
+    public void setAvailable_bikes(int available_bikes) {
+        this.available_bikes = available_bikes;
     }
 }

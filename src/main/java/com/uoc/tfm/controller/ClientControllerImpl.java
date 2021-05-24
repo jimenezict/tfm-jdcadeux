@@ -18,12 +18,12 @@ public class ClientControllerImpl implements ClientController {
     private ClientService clientService;
 
     @Override
-    public StationsLocation getStationsLocation(String domain, String service) {
-        log.info("Starting station collections: {} and city {}", clientService.getServiceName(), service);
+    public StationsLocation getStationsLocation(String service) {
+        log.info("Starting station location: {} and city {}", clientService.getServiceName(), service);
         StationsLocation stationsLocation = new StationsLocation();
 
         try {
-            stationsLocation = clientService.getStationsLocation(domain, service);
+            stationsLocation = clientService.getStationsLocation(service);
         } catch (Exception e) {
             log.error("Fail on Location status collection {} and city {} due to: ", clientService.getServiceName(), service, e);
             return stationsLocation;
@@ -36,18 +36,18 @@ public class ClientControllerImpl implements ClientController {
     }
 
     @Override
-    public StationsStatus getStationStatus(String domain, String city, String service) {
-        log.info("Starting station status collections: {} and city {}", service, city);
+    public StationsStatus getStationStatus(String service) {
+        log.info("Starting station status: {} and city {}", clientService.getServiceName(), service);
         StationsStatus stationStatus = new StationsStatus();
 
         try {
-            stationStatus = clientService.getStationStatus(domain, city, service);
+            stationStatus = clientService.getStationStatus(service);
         } catch (Exception e) {
-            log.error("Fail on station status collection {} and city {} due to: ", clientService.getServiceName(), city, e);
+            log.error("Fail on station status collection {} and city {} due to: ", clientService.getServiceName(), service, e);
             return stationStatus;
         }
         log.info("Ending station status collections: {} and city {} with {} registers",
-                clientService.getServiceName(), city,
+                clientService.getServiceName(), service,
                 stationStatus.getStationStatusList().size());
         return stationStatus;
 

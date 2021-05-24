@@ -6,9 +6,9 @@ import com.uoc.tfm.domain.contracts.Contract;
 
 public interface ClientService {
 
-    public StationsLocation getStationsLocation(String domain, String service);
+    public StationsLocation getStationsLocation(String service);
 
-    public StationsStatus getStationStatus(String domain,String city, String service);
+    public StationsStatus getStationStatus(String service);
 
     public Contract[] getServiceContracts();
 

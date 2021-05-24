@@ -27,4 +27,13 @@ public class JdcadeuxImplTest {
         assertThat(contractsUrl.contains(apiKey));
     }
 
+    @Test
+    public void buildStationsUrl_shouldReturnUrlwithApiKey() {
+        String contractsUrl = jdcadeuxImpl.buildStationsUrl("elclot");
+        assertThat(!contractsUrl.isEmpty());
+        assertThat(contractsUrl.contains("apiKey="));
+        assertThat(contractsUrl.contains(apiKey));
+        assertThat(contractsUrl.contains("elclot"));
+    }
+
 }

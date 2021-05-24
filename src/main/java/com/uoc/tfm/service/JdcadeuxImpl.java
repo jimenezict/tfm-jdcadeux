@@ -6,22 +6,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class JdcadeuxImpl implements Jdcadeux {
 
+    private static final String URL_ROOT = "https://api.jcdecaux.com/vls/v1/";
+
     @Value("${jdcadeux.apiKey}")
     private String apiKey;
 
     @Override
-    public String buildLocationUrl(String domain, String service) {
-        return "http://www." + service + "." + domain + "/service/carto";
-    }
-
-    @Override
-    public String buildStatusUrl(String domain, String service, String city, int id) {
-        return "http://www." + service + "." + domain + "/service/stationdetails/" + city + "/" + id;
+    public String buildStationsUrl(String service) {
+        return URL_ROOT + "stations?contract=" + service + "&apiKey=" + apiKey;
     }
 
     @Override
     public String buildContractsUrl() {
-        return "https://api.jcdecaux.com/vls/v1/contracts?apiKey=" + apiKey;
+        return URL_ROOT + "contracts?apiKey=" + apiKey;
     }
 
 }
